@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Garage App
 
-## Getting Started
+Garage App is a Next.js application that implements a multi-step registration flow for business owners.
+It includes:
 
-First, run the development server:
+- A web registration wizard (`/register/*`) that collects address, business details, and credentials.
+- API endpoints for registration and address lookup.
+- A layered architecture (`application`, `domain`, `infrastructure`, `presentation`) with MongoDB persistence.
+
+## 1. What This Project Does
+
+Main features:
+
+- Business owner registration through `POST /api/auth/register`.
+- Address normalization through Google Geocoding via `POST /api/maps`.
+- Database health check via `GET /api/health`.
+
+The registration flow stores a user and a business record in MongoDB using Mongoose repositories.
+
+## 2. Install And Run
+
+### Prerequisites
+
+- Node.js 20+ recommended
+- npm 10+ recommended
+- A running MongoDB instance
+- A Google Maps API key with Geocoding enabled
+
+### Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create an environment file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+3. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Other Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # production build
+npm run start   # run production server
+npm run lint    # run ESLint
+npm test        # run Jest tests
+```
 
-## Learn More
+## 3. Architecture And Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+This codebase follows a layered, domain-oriented structure:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/application`: DTOs and use cases (business logic orchestration).
+- `src/domain`: Entities and repository interfaces (core contracts).
+- `src/infrastructure`: Mongoose models/repositories, DB connection, security helpers.
+- `src/presentation`: API controllers and web UI (components, hooks, context).
+- `app/`: Next.js App Router routes and API route handlers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Important paths:
 
-## Deploy on Vercel
+- `app/api/auth/register/route.ts`: registration endpoint.
+- `app/api/maps/route.ts`: address lookup endpoint.
+- `app/api/health/route.ts`: MongoDB connectivity check.
+- `src/presentation/api/controllers/RegisterController.ts`: request validation and registration orchestration.
+- `src/infrastructure/db/mongoose/connection.ts`: MongoDB connection bootstrap and cache.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 4. Environment Variables, Dependencies, And Requirements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Create `.env.local` with:
+
+```env
+MONGODB_URI=mongodb://localhost:27017/garage_app
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+```
+
+Variable details:
+
+- `MONGODB_URI`: required by `connectMongo()`; requests that require DB access will fail if missing.
+- `GOOGLE_MAPS_API_KEY`: required by `GetAddressFromGoogleUseCase`; maps requests fail if missing.
+
+Core runtime dependencies include Next.js, React, Mongoose, Zod, bcrypt, and jsonwebtoken.
+
+## 5. Quick Start For Developers
+
+1. Configure `.env.local` with MongoDB and Google Maps API key.
+2. Run `npm install`.
+3. Run `npm run dev`.
+4. Verify health endpoint:
+	 - `GET http://localhost:3000/api/health`
+5. Test address lookup:
+	 - `POST http://localhost:3000/api/maps`
+	 - body: `{ "address": "your address" }`
+6. Test registration endpoint:
+	 - `POST http://localhost:3000/api/auth/register`
+	 - include address + business + user fields expected by `RegisterController`.
+
+## API Reference
+
+### `GET /api/health`
+
+Checks MongoDB connectivity.
+
+Example response:
+
+```json
+{
+	"ok": true,
+	"message": "Mongo connected"
+}
+```
+
+### `POST /api/maps`
+
+Resolves an input address using Google Geocoding.
+
+Request body:
+
+```json
+{
+	"address": "1600 Amphitheatre Parkway, Mountain View"
+}
+```
+
+### `POST /api/auth/register`
+
+Registers a user and a business owner profile.
+
+Request body shape:
+
+```json
+{
+	"address": {
+		"formattedAddress": "...",
+		"streetNumber": "...",
+		"route": "...",
+		"city": "...",
+		"province": "...",
+		"country": "...",
+		"postalCode": "...",
+		"lat": 0,
+		"lng": 0
+	},
+	"businessName": "...",
+	"ownerName": "...",
+	"phone": "...",
+	"businessEmail": "...",
+	"firstName": "...",
+	"lastName": "...",
+	"email": "...",
+	"password": "..."
+}
+```
+
+## Notes
+
+- Use `npm run dev` (not `npm dev start`).
+- Passwords are hashed before persistence.
+- Input is validated with Zod in API controllers.
