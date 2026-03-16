@@ -1,5 +1,10 @@
 import { UserModel } from "@/infrastructure/db/mongoose/models/UserModel";
-import { UserRepository, CreateUserInput, UserDTO } from "@/domain/repositories/UserRepository";
+import {
+  UserRepository,
+  CreateUserInput,
+  UserDTO,
+  UserAuthDTO,
+} from "@/domain/repositories/UserRepository";
 
 export class MongooseUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<UserDTO | null> {
@@ -11,6 +16,19 @@ export class MongooseUserRepository implements UserRepository {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+    };
+  }
+
+  async findAuthByEmail(email: string): Promise<UserAuthDTO | null> {
+    const user = await UserModel.findOne({ email }).lean();
+    if (!user) return null;
+
+    return {
+      id: String(user._id),
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      passwordHash: user.passwordHash,
     };
   }
 

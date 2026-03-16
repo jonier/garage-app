@@ -12,7 +12,12 @@ export type UserDTO = {
   email: string;
 };
 
+export type UserAuthDTO = UserDTO & {
+  passwordHash: string;
+};
+
 export interface UserRepository {
   findByEmail(email: string): Promise<UserDTO | null>;
+  findAuthByEmail(email: string): Promise<UserAuthDTO | null>;
   create(input: CreateUserInput): Promise<UserDTO>;
 }
