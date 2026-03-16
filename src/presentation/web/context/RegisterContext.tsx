@@ -17,11 +17,11 @@ export type AddressData = {
 export type RegisterState = {
   address?: AddressData;
   businessName?: string;
-  ownerName?: string;
-  phone?: string;
   businessEmail?: string;
+  ownerName?: string;
   firstName?: string;
   lastName?: string;
+  phone?: string;
   email?: string;
   password?: string;
 };

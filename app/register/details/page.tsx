@@ -10,6 +10,7 @@ const DetailsStep = () => {
     ownerName,
     phone,
     businessEmail,
+    errors,
     setBusinessName,
     setOwnerName,
     setPhone,
@@ -26,6 +27,7 @@ const DetailsStep = () => {
       ownerName={ownerName}
       phone={phone}
       businessEmail={businessEmail}
+      errors={errors}
       onBusinessNameChange={setBusinessName}
       onOwnerNameChange={setOwnerName}
       onPhoneChange={setPhone}
