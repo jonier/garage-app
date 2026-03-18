@@ -19,6 +19,25 @@ const addressSchema = z.object({
 
 const schema = z.object({
   address: addressSchema,
+  availability: z
+    .array(
+      z.object({
+        day: z.enum([
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+        ]),
+        opensAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+        closesAt: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/),
+        isClosed: z.boolean().default(false),
+      })
+    )
+    .optional()
+    .default([]),
   businessName: z.string().min(2).max(120),
   ownerName: z.string().min(2).max(120),
   phone: z.string().min(5).max(30),

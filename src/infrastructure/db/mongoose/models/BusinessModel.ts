@@ -1,11 +1,34 @@
 import { Schema, model, models } from "mongoose";
 
+const AvailabilitySchema = new Schema(
+  {
+    day: {
+      type: String,
+      required: true,
+      enum: [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+      ],
+    },
+    opensAt: { type: String, required: true, trim: true },
+    closesAt: { type: String, required: true, trim: true },
+    isClosed: { type: Boolean, required: true, default: false },
+  },
+  { _id: false }
+);
+
 const BusinessSchema = new Schema(
   {
     name: { type: String, required: true, trim: true, maxlength: 120 },
     ownerName: { type: String, required: true, trim: true, maxlength: 120 },
     phone: { type: String, required: true, trim: true, maxlength: 30 },
     businessEmail: { type: String, required: true, lowercase: true, trim: true, maxlength: 120 },
+    availability: { type: [AvailabilitySchema], default: [] },
 
     formattedAddress: { type: String, required: true, trim: true, maxlength: 200 },
     street: { type: String, required: true, trim: true, maxlength: 120 },

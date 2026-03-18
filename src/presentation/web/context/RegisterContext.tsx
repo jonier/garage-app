@@ -14,8 +14,16 @@ export type AddressData = {
   lng: number;
 };
 
+export type BusinessAvailability = {
+  day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+  opensAt: string;
+  closesAt: string;
+  isClosed: boolean;
+};
+
 export type RegisterState = {
   address?: AddressData;
+  availability?: BusinessAvailability[];
   businessName?: string;
   businessEmail?: string;
   ownerName?: string;

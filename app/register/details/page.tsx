@@ -10,11 +10,15 @@ const DetailsStep = () => {
     ownerName,
     phone,
     businessEmail,
+    availability,
     errors,
     setBusinessName,
     setOwnerName,
     setPhone,
     setBusinessEmail,
+    setDayClosed,
+    setDayOpensAt,
+    setDayClosesAt,
     goToAddress,
     goToNextStep,
     saveAndEditAddress,
@@ -27,11 +31,15 @@ const DetailsStep = () => {
       ownerName={ownerName}
       phone={phone}
       businessEmail={businessEmail}
+      availability={availability}
       errors={errors}
       onBusinessNameChange={setBusinessName}
       onOwnerNameChange={setOwnerName}
       onPhoneChange={setPhone}
       onBusinessEmailChange={setBusinessEmail}
+      onDayClosedChange={setDayClosed}
+      onDayOpensAtChange={setDayOpensAt}
+      onDayClosesAtChange={setDayClosesAt}
       onGoBack={goToAddress}
       onGoNext={goToNextStep}
       onEditAddress={saveAndEditAddress}

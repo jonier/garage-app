@@ -8,6 +8,7 @@ export class MongooseBusinessRepository implements BusinessRepository {
       ownerName: input.ownerName,
       phone: input.phone,
       businessEmail: input.businessEmail,
+      availability: input.availability ?? [],
 
       formattedAddress: input.formattedAddress,
       street: `${input.streetNumber} ${input.route}`.trim(),

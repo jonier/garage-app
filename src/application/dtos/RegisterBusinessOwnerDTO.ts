@@ -1,7 +1,11 @@
-import { type AddressData } from "@/presentation/web/context/RegisterContext";
+import {
+  type AddressData,
+  type BusinessAvailability,
+} from "@/presentation/web/context/RegisterContext";
 
 export type RegisterBusinessOwnerDTO = {
   address: AddressData;
+  availability?: BusinessAvailability[];
   businessName: string;
   ownerName: string;
   phone: string;

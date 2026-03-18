@@ -92,6 +92,7 @@ export const useCreateCredentialAndBusiness = () => {
 
     const payload = {
       address: state.address,
+      availability: state.availability ?? [],
       businessName: state.businessName,
       ownerName: state.ownerName,
       phone: state.phone,

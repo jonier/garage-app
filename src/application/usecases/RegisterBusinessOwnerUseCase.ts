@@ -31,6 +31,7 @@ export class RegisterBusinessOwnerUseCase {
         ownerName: dto.ownerName,
         phone: dto.phone,
         businessEmail: dto.businessEmail,
+        availability: dto.availability,
 
         formattedAddress: dto.address.formattedAddress,
         streetNumber: dto.address.streetNumber,

@@ -1,8 +1,16 @@
+export type AvailabilityInput = {
+  day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+  opensAt: string;
+  closesAt: string;
+  isClosed: boolean;
+};
+
 export type CreateBusinessInput = {
   name: string;
   ownerName: string;
   phone: string;
   businessEmail: string;
+  availability?: AvailabilityInput[];
   formattedAddress: string;
   streetNumber?: string;
   route?: string;
