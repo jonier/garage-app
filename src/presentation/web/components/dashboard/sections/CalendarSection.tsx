@@ -230,12 +230,14 @@ export function CalendarSection() {
                 className={`relative h-12 rounded-lg border text-sm transition ${
                   isSelected
                     ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                    : hasAppointments
+                      ? "border-pink-300 bg-pink-50 text-pink-700 hover:border-pink-400"
                     : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
                 }`}
               >
                 {day}
                 {hasAppointments && (
-                  <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-emerald-500" />
+                  <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-pink-500" />
                 )}
               </button>
             );
