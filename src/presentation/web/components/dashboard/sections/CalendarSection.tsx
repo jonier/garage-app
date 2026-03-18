@@ -207,6 +207,11 @@ export function CalendarSection() {
           </div>
         </div>
 
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm text-emerald-700">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          Green day: at least one interview scheduled
+        </div>
+
         <div className="grid grid-cols-7 gap-2">
           {weekDays.map((day) => (
             <div key={day} className="px-2 py-1 text-center text-xs font-medium text-slate-500">
@@ -227,17 +232,16 @@ export function CalendarSection() {
               <button
                 key={iso}
                 onClick={() => setSelectedDate(iso)}
-                className={`relative h-12 rounded-lg border text-sm transition ${
-                  isSelected
+                className={`relative h-12 rounded-lg border text-sm transition ${isSelected
                     ? "border-indigo-500 bg-indigo-50 text-indigo-700"
                     : hasAppointments
-                      ? "border-pink-300 bg-pink-50 text-pink-700 hover:border-pink-400"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
-                }`}
+                      ? "border-emerald-300 bg-emerald-50 text-emerald-700 hover:border-emerald-400"
+                      : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                  }`}
               >
                 {day}
                 {hasAppointments && (
-                  <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-pink-500" />
+                  <span className="absolute bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-emerald-500" />
                 )}
               </button>
             );
