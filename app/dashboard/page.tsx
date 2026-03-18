@@ -6,6 +6,7 @@ import { Sidebar } from "@/presentation/web/components/dashboard/Sidebar";
 import { DashboardOverviewSection } from "@/presentation/web/components/dashboard/sections/DashboardOverviewSection";
 import { CalendarSection } from "@/presentation/web/components/dashboard/sections/CalendarSection";
 import { ProfileSection } from "@/presentation/web/components/dashboard/sections/ProfileSection";
+import { MapSection } from "@/presentation/web/components/dashboard/sections/MapSection";
 import { DashboardSection } from "@/presentation/web/components/dashboard/types";
 
 export default function DashboardPage() {
@@ -40,6 +41,7 @@ export default function DashboardPage() {
 
             {activeSection === "calendar" && <CalendarSection />}
             {activeSection === "profile" && <ProfileSection />}
+            {activeSection === "map" && <MapSection />}
           </main>
         </div>
       </div>

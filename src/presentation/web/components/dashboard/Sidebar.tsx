@@ -3,6 +3,7 @@ import {
   Calendar,
   Clock3,
   LayoutDashboard,
+  MapPin,
   User,
   Users,
 } from "lucide-react";
@@ -28,6 +29,7 @@ export function Sidebar({
     { icon: User, label: "Users" },
     { icon: Calendar, label: "Calendar", section: "calendar" as const },
     { icon: Users, label: "Profile", section: "profile" as const },
+    { icon: MapPin, label: "Map", section: "map" as const },
     { icon: Clock3, label: "History" },
   ];
 

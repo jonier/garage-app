@@ -1,1 +1,1 @@
-export type DashboardSection = "dashboard" | "calendar" | "profile";
+export type DashboardSection = "dashboard" | "calendar" | "profile" | "map";
