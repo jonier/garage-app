@@ -37,9 +37,9 @@ const steps = [
 export default function Home() {
   return (
     <main
-      className={`${bodyFont.className} relative min-h-screen overflow-hidden bg-slate-100 text-slate-900`}
+      className={`${bodyFont.className} relative min-h-screen overflow-hidden bg-[#f5f7ff] text-slate-900`}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(79,70,229,0.2),transparent_38%),radial-gradient(circle_at_85%_10%,rgba(23,26,93,0.18),transparent_35%),radial-gradient(circle_at_50%_80%,rgba(15,23,42,0.08),transparent_45%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(27,138,91,0.18),transparent_38%),radial-gradient(circle_at_85%_10%,rgba(14,116,144,0.2),transparent_35%),radial-gradient(circle_at_50%_80%,rgba(15,23,42,0.08),transparent_45%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] bg-size-[42px_42px] mask-[radial-gradient(circle_at_center,black_25%,transparent_85%)]" />
 
       <section className="relative mx-auto flex w-full max-w-6xl flex-col px-6 pb-16 pt-10 sm:px-8 lg:px-12">
@@ -65,7 +65,7 @@ export default function Home() {
 
         <div className="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
           <div className="landing-fade-up space-y-6">
-            <span className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-700">
+            <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Discover. Request. Repair.
             </span>
             <h1
@@ -80,7 +80,7 @@ export default function Home() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
                 href="/register/address"
-                className="rounded-2xl bg-indigo-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_12px_35px_rgba(79,70,229,0.3)] transition hover:-translate-y-0.5 hover:bg-indigo-500"
+                className="rounded-2xl bg-emerald-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-[0_12px_35px_rgba(5,150,105,0.25)] transition hover:-translate-y-0.5 hover:bg-emerald-500"
               >
                 Start now
               </Link>
@@ -95,7 +95,7 @@ export default function Home() {
 
           <div className="landing-fade-up-delay rounded-3xl border border-slate-200 bg-white/85 p-5 shadow-[0_30px_60px_rgba(15,23,42,0.1)] backdrop-blur-sm sm:p-6">
             <div className="rounded-2xl bg-slate-900 p-5 text-white sm:p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-200">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300">
                 Service request preview
               </p>
               <h2 className={`${headingFont.className} mt-3 text-2xl font-bold`}>
@@ -109,7 +109,7 @@ export default function Home() {
                 </div>
                 <div className="rounded-xl bg-white/8 p-3">
                   <p className="text-xs text-slate-300">Availability</p>
-                  <p className="mt-1 font-semibold text-indigo-200">Today 3:30 PM</p>
+                  <p className="mt-1 font-semibold text-emerald-300">Today 3:30 PM</p>
                 </div>
                 <div className="col-span-2 rounded-xl bg-white/8 p-3">
                   <p className="text-xs text-slate-300">Requested service</p>

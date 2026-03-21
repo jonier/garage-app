@@ -233,10 +233,10 @@ export function CalendarSection() {
                 key={iso}
                 onClick={() => setSelectedDate(iso)}
                 className={`relative h-12 rounded-lg border text-sm transition ${isSelected
-                    ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                    : hasAppointments
-                      ? "border-indigo-300 bg-indigo-50 text-indigo-700 hover:border-indigo-400"
-                      : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                  : hasAppointments
+                    ? "border-indigo-300 bg-indigo-50 text-indigo-700 hover:border-indigo-400"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
                   }`}
               >
                 {day}

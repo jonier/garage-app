@@ -1,10 +1,11 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import {
-  BarChart3,
+  CarFront,
   Calendar,
-  Clock3,
   LayoutDashboard,
   MapPin,
-  User,
   Users,
 } from "lucide-react";
 import { DashboardSection } from "@/presentation/web/components/dashboard/types";
@@ -24,13 +25,43 @@ export function Sidebar({
   onHoverCollapse,
   onHoverRestore,
 }: SidebarProps) {
+  const [garageName, setGarageName] = useState("Garage App");
+
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      return;
+    }
+
+    const loadGarageName = async () => {
+      try {
+        const res = await fetch("/api/business/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          return;
+        }
+
+        if (typeof data?.name === "string" && data.name.trim()) {
+          setGarageName(data.name.trim());
+        }
+      } catch {
+        // Keep fallback brand name when request fails.
+      }
+    };
+
+    void loadGarageName();
+  }, []);
+
   const mainItems = [
     { icon: LayoutDashboard, label: "Dashboard", section: "dashboard" as const },
-    { icon: User, label: "Users" },
     { icon: Calendar, label: "Appointment", section: "calendar" as const },
     { icon: Users, label: "Profile", section: "profile" as const },
     { icon: MapPin, label: "Map", section: "map" as const },
-    { icon: Clock3, label: "History" },
   ];
 
   return (
@@ -46,11 +77,11 @@ export function Sidebar({
           className={`flex h-18.5 items-center border-b border-slate-200 ${visualCollapsed ? "justify-center px-0" : "gap-3 px-5"}`}
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white">
-            <BarChart3 className="h-5 w-5" />
+            <CarFront className="h-5 w-5" />
           </div>
 
           {!visualCollapsed && (
-            <span className="text-2xl font-bold text-slate-900">TailAdmin</span>
+            <span className="truncate text-2xl font-bold text-slate-900">{garageName}</span>
           )}
         </div>
 

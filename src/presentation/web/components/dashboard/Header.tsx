@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, ChevronDown, LogOut, Menu, Moon, Search } from "lucide-react";
+import { Bell, ChevronDown, LogOut, Menu } from "lucide-react";
 
 type HeaderProps = {
   onToggle: () => void;
@@ -40,30 +40,16 @@ export function Header({ onToggle, userName }: HeaderProps) {
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-slate-100/90 backdrop-blur">
       <div className="flex items-center justify-between gap-4 px-6 py-4">
-        <div className="flex flex-1 items-center gap-4">
+        <div className="flex items-center gap-4">
           <button
             onClick={onToggle}
             className="rounded-xl border border-slate-200 bg-white p-3 text-slate-600 hover:bg-slate-50"
           >
             <Menu className="h-5 w-5" />
           </button>
-
-          <div className="flex w-full max-w-xl items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
-            <Search className="h-5 w-5 text-slate-400" />
-            <input
-              placeholder="Search or type command..."
-              className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
-            />
-            <span className="rounded-md border border-slate-200 px-2 py-1 text-xs text-slate-400">
-              ⌘ K
-            </span>
-          </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="rounded-full border border-slate-200 bg-white p-3">
-            <Moon className="h-5 w-5 text-slate-600" />
-          </button>
           <button className="relative rounded-full border border-slate-200 bg-white p-3">
             <Bell className="h-5 w-5 text-slate-600" />
             <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-indigo-500" />

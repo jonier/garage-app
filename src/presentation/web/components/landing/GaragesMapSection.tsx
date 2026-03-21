@@ -92,8 +92,8 @@ export function GaragesMapSection() {
         popupAnchor: [0, -28],
         html: `
           <div style="position:relative;width:22px;height:30px;">
-            <span style="position:absolute;left:50%;top:0;width:18px;height:18px;background:#4f46e5;border:2px solid #ffffff;border-radius:9999px;transform:translateX(-50%);box-shadow:0 6px 14px rgba(79,70,229,0.45);"></span>
-            <span style="position:absolute;left:50%;top:15px;width:10px;height:14px;background:#4f46e5;clip-path:polygon(50% 100%,0 0,100% 0);transform:translateX(-50%);"></span>
+            <span style="position:absolute;left:50%;top:0;width:18px;height:18px;background:#16a34a;border:2px solid #ffffff;border-radius:9999px;transform:translateX(-50%);box-shadow:0 6px 14px rgba(22,163,74,0.45);"></span>
+            <span style="position:absolute;left:50%;top:15px;width:10px;height:14px;background:#16a34a;clip-path:polygon(50% 100%,0 0,100% 0);transform:translateX(-50%);"></span>
             <span style="position:absolute;left:50%;top:6px;width:6px;height:6px;background:#ffffff;border-radius:9999px;transform:translateX(-50%);"></span>
           </div>
         `,
@@ -178,11 +178,10 @@ export function GaragesMapSection() {
                 <button
                   key={garage.id}
                   onClick={() => setActiveGarageId(garage.id)}
-                  className={`w-full rounded-2xl border p-4 text-left transition ${
-                    isActive
-                      ? "border-indigo-400 bg-indigo-50"
+                    className={`w-full rounded-2xl border p-4 text-left transition ${isActive
+                      ? "border-emerald-400 bg-emerald-50"
                       : "border-slate-200 bg-white hover:border-slate-300"
-                  }`}
+                    }`}
                 >
                   <p className="text-base font-semibold text-slate-900">{garage.name}</p>
                   <p className="mt-1 text-sm text-slate-600">{garage.formattedAddress}</p>
