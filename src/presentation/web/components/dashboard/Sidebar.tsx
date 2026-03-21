@@ -27,7 +27,7 @@ export function Sidebar({
   const mainItems = [
     { icon: LayoutDashboard, label: "Dashboard", section: "dashboard" as const },
     { icon: User, label: "Users" },
-    { icon: Calendar, label: "Calendar", section: "calendar" as const },
+    { icon: Calendar, label: "Appointment", section: "calendar" as const },
     { icon: Users, label: "Profile", section: "profile" as const },
     { icon: MapPin, label: "Map", section: "map" as const },
     { icon: Clock3, label: "History" },

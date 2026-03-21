@@ -69,6 +69,12 @@ export const useLogin = () => {
         localStorage.setItem("auth_token", data.token);
       }
 
+      const firstName = data?.user?.firstName?.trim?.() || "";
+      const lastName = data?.user?.lastName?.trim?.() || "";
+      const fullName = `${firstName} ${lastName}`.trim();
+      const fallbackName = emailValue.split("@")[0] || "User";
+      localStorage.setItem("auth_user_name", fullName || fallbackName);
+
       router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Unexpected error");

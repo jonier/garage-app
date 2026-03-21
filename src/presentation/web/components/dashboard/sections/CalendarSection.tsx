@@ -184,7 +184,7 @@ export function CalendarSection() {
       <Card className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900">Calendar</h2>
+            <h2 className="text-2xl font-semibold text-slate-900">Appointment</h2>
             <p className="text-slate-500">Manage appointments by day and time.</p>
           </div>
 
