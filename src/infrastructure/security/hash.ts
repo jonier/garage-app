@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 /**
  * Genera un hash seguro para almacenar en base de datos.

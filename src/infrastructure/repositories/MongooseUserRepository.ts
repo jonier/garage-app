@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { UserModel } from "@/infrastructure/db/mongoose/models/UserModel";
 import {
   UserRepository,
@@ -6,9 +7,17 @@ import {
   UserAuthDTO,
 } from "@/domain/repositories/UserRepository";
 
+type UserLean = {
+  _id: Types.ObjectId;
+  firstName: string;
+  lastName: string;
+  email: string;
+  passwordHash: string;
+};
+
 export class MongooseUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<UserDTO | null> {
-    const user = await UserModel.findOne({ email }).lean();
+    const user = await UserModel.findOne({ email }).lean<UserLean | null>();
     if (!user) return null;
 
     return {
@@ -20,7 +29,7 @@ export class MongooseUserRepository implements UserRepository {
   }
 
   async findAuthByEmail(email: string): Promise<UserAuthDTO | null> {
-    const user = await UserModel.findOne({ email }).lean();
+    const user = await UserModel.findOne({ email }).lean<UserLean | null>();
     if (!user) return null;
 
     return {

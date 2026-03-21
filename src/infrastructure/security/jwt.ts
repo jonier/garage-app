@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 
 export type AuthTokenPayload = {
   sub: string;
@@ -15,7 +15,7 @@ function getJwtSecret(): string {
 
 export function signAuthToken(
   payload: AuthTokenPayload,
-  expiresIn: string | number = "7d"
+  expiresIn: jwt.SignOptions["expiresIn"] = "7d"
 ): string {
   return jwt.sign(payload, getJwtSecret(), { expiresIn });
 }

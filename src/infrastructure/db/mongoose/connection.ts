@@ -1,11 +1,17 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const rawMongoUri = (process.env.MONGODB_URI ?? process.env.MONTODB_IRI)?.trim();
 
-if (!MONGODB_URI) throw new Error("Missing MONGODB_URI in .env.local");
+if (!rawMongoUri) {
+  throw new Error(
+    "Missing Mongo URI. Use MONGODB_URI in .env.local (or fix typo MONTODB_IRI)."
+  );
+}
+
+const MONGODB_URI: string = rawMongoUri;
 
 declare global {
-  // eslint-disable-next-line no-var
+
   var __mongooseConn:
     | { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null }
     | undefined;
