@@ -7,7 +7,7 @@ export function ProfileSection() {
       <p className="mb-6 text-slate-500">This is a navigation test view for your profile module.</p>
 
       <div className="flex flex-col gap-4 md:flex-row md:items-center">
-        <div className="h-24 w-24 rounded-full bg-linear-to-br from-sky-400 to-indigo-500" />
+        <div className="h-24 w-24 rounded-full bg-linear-to-br from-indigo-500 to-[#171a5d]" />
         <div>
           <p className="text-xl font-semibold text-slate-900">Musharof</p>
           <p className="text-slate-500">musharof@garage.app</p>

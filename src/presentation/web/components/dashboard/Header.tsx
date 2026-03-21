@@ -38,7 +38,7 @@ export function Header({ onToggle, userName }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-20 border-b border-slate-200 bg-[#f4f7fb]/90 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-slate-200 bg-slate-100/90 backdrop-blur">
       <div className="flex items-center justify-between gap-4 px-6 py-4">
         <div className="flex flex-1 items-center gap-4">
           <button
@@ -66,14 +66,14 @@ export function Header({ onToggle, userName }: HeaderProps) {
           </button>
           <button className="relative rounded-full border border-slate-200 bg-white p-3">
             <Bell className="h-5 w-5 text-slate-600" />
-            <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-orange-400" />
+            <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-indigo-500" />
           </button>
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={() => setOpenUserMenu((prev) => !prev)}
               className="flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-sky-400 to-indigo-500 text-sm font-semibold text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-indigo-500 to-[#171a5d] text-sm font-semibold text-white">
                 {initials}
               </div>
               <span className="text-sm font-medium text-slate-700">{displayName}</span>

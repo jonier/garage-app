@@ -68,14 +68,6 @@ export function MapSection() {
 
       {!loading && !error && business && (
         <div className="space-y-4">
-          <div className="rounded-2xl border border-slate-200 p-4">
-            <p className="text-sm text-slate-500">Business</p>
-            <p className="text-lg font-semibold text-slate-900">{business.name}</p>
-            <p className="mt-1 text-sm text-slate-600">{business.formattedAddress}</p>
-            <p className="text-xs text-slate-500">
-              {business.city}, {business.province}, {business.country}
-            </p>
-          </div>
 
           <div className="overflow-hidden rounded-2xl border border-slate-200">
             <iframe
@@ -85,6 +77,14 @@ export function MapSection() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+          </div>
+          <div className="rounded-2xl border border-slate-200 p-4">
+            <p className="text-sm text-slate-500">Business</p>
+            <p className="text-lg font-semibold text-slate-900">{business.name}</p>
+            <p className="mt-1 text-sm text-slate-600">{business.formattedAddress}</p>
+            <p className="text-xs text-slate-500">
+              {business.city}, {business.province}, {business.country}
+            </p>
           </div>
         </div>
       )}

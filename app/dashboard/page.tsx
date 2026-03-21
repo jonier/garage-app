@@ -54,7 +54,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f4f7fb]">
+    <div className="min-h-screen bg-slate-100">
       <div className="flex">
         <Sidebar
           visualCollapsed={visualCollapsed}

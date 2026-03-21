@@ -22,7 +22,7 @@ export function DashboardOverviewSection({ ready }: DashboardOverviewSectionProp
                 <p className="text-sm text-slate-500">Customers</p>
                 <h3 className="mt-2 text-4xl font-bold text-slate-900">3,782</h3>
               </div>
-              <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-600">
+              <span className="rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-600">
                 ↑ 11.01%
               </span>
             </div>
@@ -129,7 +129,7 @@ export function DashboardOverviewSection({ ready }: DashboardOverviewSectionProp
             <div className="flex h-52 w-52 items-center justify-center rounded-full border-14 border-slate-200 border-t-indigo-500 border-l-indigo-500 rotate-45">
               <div className="-rotate-45 text-center">
                 <p className="text-5xl font-bold text-slate-900">75.55%</p>
-                <span className="mt-2 inline-block rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-600">
+                <span className="mt-2 inline-block rounded-full bg-indigo-50 px-3 py-1 text-sm font-semibold text-indigo-600">
                   +10%
                 </span>
               </div>
