@@ -106,7 +106,7 @@ export const LoginView: React.FC<LoginViewProps> = ({
 
           <p className="mt-6 text-sm text-slate-500">
             Don&apos;t have an account?{" "}
-            <Link href="/register/address" className="font-semibold text-indigo-600 hover:text-indigo-500">
+            <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
               Sign up
             </Link>
           </p>

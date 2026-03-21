@@ -178,9 +178,9 @@ export function GaragesMapSection() {
                 <button
                   key={garage.id}
                   onClick={() => setActiveGarageId(garage.id)}
-                    className={`w-full rounded-2xl border p-4 text-left transition ${isActive
-                      ? "border-emerald-400 bg-emerald-50"
-                      : "border-slate-200 bg-white hover:border-slate-300"
+                  className={`w-full rounded-2xl border p-4 text-left transition ${isActive
+                    ? "border-emerald-400 bg-emerald-50"
+                    : "border-slate-200 bg-white hover:border-slate-300"
                     }`}
                 >
                   <p className="text-base font-semibold text-slate-900">{garage.name}</p>

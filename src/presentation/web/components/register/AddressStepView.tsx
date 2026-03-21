@@ -1,6 +1,7 @@
 "use client";
 
 import type { AddressData } from "@/presentation/web/context/RegisterContext";
+import { RegisterShell } from "@/presentation/web/components/register/RegisterShell";
 
 type AddressStepViewProps = {
   address: string;
@@ -16,28 +17,42 @@ export const AddressStepView: React.FC<AddressStepViewProps> = ({
   onSearch,
 }) => {
   return (
-    <div className="p-6">
-      <h1 className="text-xl mb-4">Enter Business Address</h1>
+    <RegisterShell
+      stepLabel="Step 1 of 3"
+      title="Business Address"
+      subtitle="Tell us where your garage is located to match nearby drivers."
+    >
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="business-address" className="mb-1.5 block text-sm font-medium text-slate-700">
+            Full address
+          </label>
+          <input
+            id="business-address"
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            value={address}
+            onChange={(e) => onAddressChange(e.target.value)}
+            placeholder="123 Rue Example, Montreal"
+          />
+        </div>
 
-      <input
-        className="border p-2 w-full"
-        value={address}
-        onChange={(e) => onAddressChange(e.target.value)}
-        placeholder="123 Rue Example, Montreal"
-      />
+        <button
+          onClick={onSearch}
+          className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-500"
+        >
+          Search Address
+        </button>
 
-      <button
-        onClick={onSearch}
-        className="bg-blue-500 text-white px-4 py-2 mt-4"
-      >
-        Search
-      </button>
-
-      {result && (
-        <pre className="mt-4 bg-gray-100 p-4">
-          {JSON.stringify(result, null, 2)}
-        </pre>
-      )}
-    </div>
+        {result && (
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+            <p className="font-semibold text-slate-900">Address found</p>
+            <p className="mt-1">{result.formattedAddress}</p>
+            <p className="text-xs text-slate-500">
+              {result.city}, {result.province}, {result.country}
+            </p>
+          </div>
+        )}
+      </div>
+    </RegisterShell>
   );
 };
