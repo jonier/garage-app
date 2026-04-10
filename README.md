@@ -15,9 +15,6 @@ Main features:
 - Address normalization through Google Geocoding via `POST /api/maps`.
 - Database health check via `GET /api/health`.
 - Appointment management through `GET` and `POST /api/appointments`.
-- HubSpot CRM sync on user registration with automatic welcome email.
-
-The registration flow stores a user and a business record in MongoDB using Mongoose repositories.
 
 ## 2. Install And Run
 
@@ -27,7 +24,6 @@ The registration flow stores a user and a business record in MongoDB using Mongo
 - npm 10+ recommended
 - A running MongoDB instance
 - A Google Maps API key with Geocoding enabled
-- A HubSpot Private App token
 
 ### Setup
 
@@ -76,11 +72,10 @@ Important paths:
 - `app/api/maps/route.ts`: address lookup endpoint.
 - `app/api/health/route.ts`: MongoDB connectivity check.
 - `app/api/appointments/route.ts`: appointments endpoint.
-- `lib/hubspot.ts`: HubSpot contact sync logic.
 - `src/presentation/api/controllers/RegisterController.ts`: request validation and registration orchestration.
 - `src/infrastructure/db/mongoose/connection.ts`: MongoDB connection bootstrap and cache.
 
-## 4. Environment Variables, Dependencies, And Requirements
+## 4. Environment Variables
 
 Create `.env.local` with:
 
@@ -88,7 +83,6 @@ Create `.env.local` with:
 MONGODB_URI=mongodb://localhost:27017/garage_app
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 JWT_SECRET=your_jwt_secret
-HUBSPOT_ACCESS_TOKEN=your_hubspot_private_token
 ```
 
 Variable details:
@@ -96,15 +90,12 @@ Variable details:
 - `MONGODB_URI`: required by `connectMongo()`; requests that require DB access will fail if missing.
 - `GOOGLE_MAPS_API_KEY`: required by `GetAddressFromGoogleUseCase`; maps requests fail if missing.
 - `JWT_SECRET`: required for signing and verifying JWT tokens.
-- `HUBSPOT_ACCESS_TOKEN`: required by `lib/hubspot.ts` to sync contacts; obtained from a HubSpot Private App.
 
-> Never commit secrets to the repository. If a token is exposed, rotate it immediately.
-
-Core runtime dependencies include Next.js, React, Mongoose, Zod, bcrypt, jsonwebtoken, and the HubSpot API.
+> Never commit secrets to the repository.
 
 ## 5. Quick Start For Developers
 
-1. Configure `.env.local` with MongoDB, Google Maps API key, JWT secret, and HubSpot token.
+1. Configure `.env.local` with MongoDB, Google Maps API key, and JWT secret.
 2. Run `npm install`.
 3. Run `npm run dev`.
 4. Verify health endpoint:
@@ -114,7 +105,6 @@ Core runtime dependencies include Next.js, React, Mongoose, Zod, bcrypt, jsonweb
    - body: `{ "address": "your address" }`
 6. Test registration endpoint:
    - `POST http://localhost:3000/api/auth/register`
-   - include address + business + user fields expected by `RegisterController`.
 7. Test appointments:
    - `GET http://localhost:3000/api/appointments`
    - `POST http://localhost:3000/api/appointments`
@@ -301,78 +291,10 @@ curl -X POST http://localhost:3000/api/appointments \
 
 ---
 
-## HubSpot Integration (User Registration + Welcome Email)
-
-HubSpot was integrated to sync contacts when a user signs up in the app.
-
-### HubSpot Private App Setup
-
-A **Private App** was created in HubSpot with these scopes:
-
-- `crm.objects.contacts.read`
-- `crm.objects.contacts.write`
-
-### Contact Sync Logic
-
-`lib/hubspot.ts` handles:
-
-- search contact by email
-- update if contact exists
-- create if not found
-
-Main function used by registration:
-
-```ts
-syncHubSpotContact({ email, firstName, lastName })
-```
-
-### Registration Flow
-
-In `app/api/register/route.ts`, run in this order:
-
-1. Validate request data
-2. Create user in MongoDB
-3. Call `syncHubSpotContact(...)` to sync with HubSpot
-
-### Automatic Welcome Email (HubSpot Workflow)
-
-1. Create and publish an **Automated** email (e.g. `Welcome`).
-2. Create a **Contact-based** workflow.
-3. Enrollment trigger: **Create date is known**.
-4. Action: **Send email** → select `Welcome`.
-5. Turn on the workflow.
-
-### Plan Requirements
-
-- Workflow email sending requires **Marketing Hub Professional or Enterprise**.
-- If the email is flagged for security review, it cannot be selected until resolved.
-- If workflow email sending is unavailable, send the welcome email directly from the backend using **Resend**, **SendGrid**, or **Brevo**, and use HubSpot only for CRM sync.
-
-### Quick Test
-
-```bash
-curl -X POST http://localhost:3000/api/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@example.com",
-    "firstName": "Jon",
-    "lastName": "Doe",
-    "password": "123456"
-  }'
-```
-
-Expected result:
-
-- user is created in app DB
-- contact is created/updated in HubSpot
-- welcome email is sent by workflow (if plan and email are enabled)
-
----
-
 ## Notes
 
 - Use `npm run dev` (not `npm dev start`).
 - Passwords are hashed before persistence.
 - Input is validated with Zod in API controllers.
 - All appointment endpoints require JWT authentication.
-- Never expose `HUBSPOT_ACCESS_TOKEN` or `JWT_SECRET` in the repository.
+- Never expose `JWT_SECRET` in the repository.
