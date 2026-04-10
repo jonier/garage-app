@@ -14,6 +14,8 @@ Main features:
 - Business owner registration through `POST /api/auth/register`.
 - Address normalization through Google Geocoding via `POST /api/maps`.
 - Database health check via `GET /api/health`.
+- Appointment management through `GET` and `POST /api/appointments`.
+- HubSpot CRM sync on user registration with automatic welcome email.
 
 The registration flow stores a user and a business record in MongoDB using Mongoose repositories.
 
@@ -25,6 +27,7 @@ The registration flow stores a user and a business record in MongoDB using Mongo
 - npm 10+ recommended
 - A running MongoDB instance
 - A Google Maps API key with Geocoding enabled
+- A HubSpot Private App token
 
 ### Setup
 
@@ -72,6 +75,8 @@ Important paths:
 - `app/api/auth/register/route.ts`: registration endpoint.
 - `app/api/maps/route.ts`: address lookup endpoint.
 - `app/api/health/route.ts`: MongoDB connectivity check.
+- `app/api/appointments/route.ts`: appointments endpoint.
+- `lib/hubspot.ts`: HubSpot contact sync logic.
 - `src/presentation/api/controllers/RegisterController.ts`: request validation and registration orchestration.
 - `src/infrastructure/db/mongoose/connection.ts`: MongoDB connection bootstrap and cache.
 
@@ -82,28 +87,38 @@ Create `.env.local` with:
 ```env
 MONGODB_URI=mongodb://localhost:27017/garage_app
 GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+JWT_SECRET=your_jwt_secret
+HUBSPOT_ACCESS_TOKEN=your_hubspot_private_token
 ```
 
 Variable details:
 
 - `MONGODB_URI`: required by `connectMongo()`; requests that require DB access will fail if missing.
 - `GOOGLE_MAPS_API_KEY`: required by `GetAddressFromGoogleUseCase`; maps requests fail if missing.
+- `JWT_SECRET`: required for signing and verifying JWT tokens.
+- `HUBSPOT_ACCESS_TOKEN`: required by `lib/hubspot.ts` to sync contacts; obtained from a HubSpot Private App.
 
-Core runtime dependencies include Next.js, React, Mongoose, Zod, bcrypt, and jsonwebtoken.
+> Never commit secrets to the repository. If a token is exposed, rotate it immediately.
+
+Core runtime dependencies include Next.js, React, Mongoose, Zod, bcrypt, jsonwebtoken, and the HubSpot API.
 
 ## 5. Quick Start For Developers
 
-1. Configure `.env.local` with MongoDB and Google Maps API key.
+1. Configure `.env.local` with MongoDB, Google Maps API key, JWT secret, and HubSpot token.
 2. Run `npm install`.
 3. Run `npm run dev`.
 4. Verify health endpoint:
-	 - `GET http://localhost:3000/api/health`
+   - `GET http://localhost:3000/api/health`
 5. Test address lookup:
-	 - `POST http://localhost:3000/api/maps`
-	 - body: `{ "address": "your address" }`
+   - `POST http://localhost:3000/api/maps`
+   - body: `{ "address": "your address" }`
 6. Test registration endpoint:
-	 - `POST http://localhost:3000/api/auth/register`
-	 - include address + business + user fields expected by `RegisterController`.
+   - `POST http://localhost:3000/api/auth/register`
+   - include address + business + user fields expected by `RegisterController`.
+7. Test appointments:
+   - `GET http://localhost:3000/api/appointments`
+   - `POST http://localhost:3000/api/appointments`
+   - Requires `Authorization: Bearer <token>` header.
 
 ## API Reference
 
@@ -115,8 +130,8 @@ Example response:
 
 ```json
 {
-	"ok": true,
-	"message": "Mongo connected"
+  "ok": true,
+  "message": "Mongo connected"
 }
 ```
 
@@ -128,7 +143,7 @@ Request body:
 
 ```json
 {
-	"address": "1600 Amphitheatre Parkway, Mountain View"
+  "address": "1600 Amphitheatre Parkway, Mountain View"
 }
 ```
 
@@ -140,30 +155,224 @@ Request body shape:
 
 ```json
 {
-	"address": {
-		"formattedAddress": "...",
-		"streetNumber": "...",
-		"route": "...",
-		"city": "...",
-		"province": "...",
-		"country": "...",
-		"postalCode": "...",
-		"lat": 0,
-		"lng": 0
-	},
-	"businessName": "...",
-	"ownerName": "...",
-	"phone": "...",
-	"businessEmail": "...",
-	"firstName": "...",
-	"lastName": "...",
-	"email": "...",
-	"password": "..."
+  "address": {
+    "formattedAddress": "...",
+    "streetNumber": "...",
+    "route": "...",
+    "city": "...",
+    "province": "...",
+    "country": "...",
+    "postalCode": "...",
+    "lat": 0,
+    "lng": 0
+  },
+  "businessName": "...",
+  "ownerName": "...",
+  "phone": "...",
+  "businessEmail": "...",
+  "firstName": "...",
+  "lastName": "...",
+  "email": "...",
+  "password": "..."
 }
 ```
+
+---
+
+## Appointments API
+
+All appointment endpoints require a valid **Bearer token** in the `Authorization` header.
+The token is resolved to a business via the authenticated user's `ownerId`.
+
+---
+
+### `GET /api/appointments`
+
+Returns all appointments for the authenticated business.
+Optionally filter by date.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Query params (optional):**
+
+| Param | Type | Format | Description |
+|-------|------|--------|-------------|
+| `date` | string | `YYYY-MM-DD` | Filter appointments by date |
+
+**Response `200`:**
+
+```json
+[
+  {
+    "id": "664f1a2b3c4d5e6f7a8b9c0d",
+    "date": "2026-04-15",
+    "time": "10:30",
+    "customer": "John Doe",
+    "service": "Oil Change",
+    "notes": "Synthetic oil preferred"
+  }
+]
+```
+
+**Error responses:**
+
+| Status | Description |
+|--------|-------------|
+| `400` | Invalid date format |
+| `401` | Missing or invalid token |
+| `404` | Business not found for current user |
+| `500` | Server error |
+
+**Example:**
+
+```bash
+# All appointments
+curl -X GET http://localhost:3000/api/appointments \
+  -H "Authorization: Bearer <token>"
+
+# Filter by date
+curl -X GET "http://localhost:3000/api/appointments?date=2026-04-15" \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+### `POST /api/appointments`
+
+Creates a new appointment for the authenticated business.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+**Request body:**
+
+| Field | Type | Required | Validation |
+|-------|------|----------|------------|
+| `date` | string | ✅ | Format `YYYY-MM-DD` |
+| `time` | string | ✅ | Format `HH:mm` (24h) |
+| `customer` | string | ✅ | 2–120 characters |
+| `service` | string | ✅ | 2–120 characters |
+| `notes` | string | ❌ | Max 500 characters |
+
+**Response `201`:**
+
+```json
+{
+  "id": "664f1a2b3c4d5e6f7a8b9c0d",
+  "date": "2026-04-15",
+  "time": "10:30",
+  "customer": "John Doe",
+  "service": "Oil Change",
+  "notes": "Synthetic oil preferred"
+}
+```
+
+**Error responses:**
+
+| Status | Description |
+|--------|-------------|
+| `400` | Invalid input (Zod validation error) |
+| `401` | Missing or invalid token |
+| `404` | Business not found for current user |
+| `500` | Server error |
+
+**Example:**
+
+```bash
+curl -X POST http://localhost:3000/api/appointments \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "date": "2026-04-15",
+    "time": "10:30",
+    "customer": "John Doe",
+    "service": "Oil Change",
+    "notes": "Synthetic oil preferred"
+  }'
+```
+
+---
+
+## HubSpot Integration (User Registration + Welcome Email)
+
+HubSpot was integrated to sync contacts when a user signs up in the app.
+
+### HubSpot Private App Setup
+
+A **Private App** was created in HubSpot with these scopes:
+
+- `crm.objects.contacts.read`
+- `crm.objects.contacts.write`
+
+### Contact Sync Logic
+
+`lib/hubspot.ts` handles:
+
+- search contact by email
+- update if contact exists
+- create if not found
+
+Main function used by registration:
+
+```ts
+syncHubSpotContact({ email, firstName, lastName })
+```
+
+### Registration Flow
+
+In `app/api/register/route.ts`, run in this order:
+
+1. Validate request data
+2. Create user in MongoDB
+3. Call `syncHubSpotContact(...)` to sync with HubSpot
+
+### Automatic Welcome Email (HubSpot Workflow)
+
+1. Create and publish an **Automated** email (e.g. `Welcome`).
+2. Create a **Contact-based** workflow.
+3. Enrollment trigger: **Create date is known**.
+4. Action: **Send email** → select `Welcome`.
+5. Turn on the workflow.
+
+### Plan Requirements
+
+- Workflow email sending requires **Marketing Hub Professional or Enterprise**.
+- If the email is flagged for security review, it cannot be selected until resolved.
+- If workflow email sending is unavailable, send the welcome email directly from the backend using **Resend**, **SendGrid**, or **Brevo**, and use HubSpot only for CRM sync.
+
+### Quick Test
+
+```bash
+curl -X POST http://localhost:3000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "firstName": "Jon",
+    "lastName": "Doe",
+    "password": "123456"
+  }'
+```
+
+Expected result:
+
+- user is created in app DB
+- contact is created/updated in HubSpot
+- welcome email is sent by workflow (if plan and email are enabled)
+
+---
 
 ## Notes
 
 - Use `npm run dev` (not `npm dev start`).
 - Passwords are hashed before persistence.
 - Input is validated with Zod in API controllers.
+- All appointment endpoints require JWT authentication.
+- Never expose `HUBSPOT_ACCESS_TOKEN` or `JWT_SECRET` in the repository.
