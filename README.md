@@ -16,6 +16,15 @@ Main features:
 - Database health check via `GET /api/health`.
 - Appointment management through `GET` and `POST /api/appointments`.
 
+## Screenshots
+
+### Landing page
+![Landing page - home](public/LandingPage1.png)
+![Landing page - sections](public/LandingPage2.png)
+
+### Dashboard
+![Main dashboard](public/Dashboard.png)
+
 ## 2. Install And Run
 
 ### Prerequisites
